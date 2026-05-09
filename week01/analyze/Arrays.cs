@@ -21,7 +21,7 @@ public static class Arrays
     }
 
     /// <summary>
-    /// Rotates list to the right
+    /// Rotates list to the right side 
     /// </summary>
     public static void RotateListRight(List<int> data, int amount)
     {
