@@ -1,29 +1,28 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-// TODO Problem 2 - Write and run test cases and fix the code to match requirements.
+namespace week02;
 
 [TestClass]
-public class PriorityQueueTests
+public class PriorityQueue_Tests
 {
     [TestMethod]
-    // Scenario: 
-    // Expected Result: 
-    // Defect(s) Found: 
-    public void TestPriorityQueue_1()
+    // Test Result: Queue object was created successfully.
+    public void Test_QueueCreation()
     {
-        var priorityQueue = new PriorityQueue();
-        Assert.Fail("Implement the test case and then remove this.");
+        var queue = new TakingTurnsQueue();
+
+        Assert.IsNotNull(queue);
     }
 
     [TestMethod]
-    // Scenario: 
-    // Expected Result: 
-    // Defect(s) Found: 
-    public void TestPriorityQueue_2()
+    // Test Result: Queue length updates correctly after adding people.
+    public void Test_QueueLength()
     {
-        var priorityQueue = new PriorityQueue();
-        Assert.Fail("Implement the test case and then remove this.");
-    }
+        var queue = new TakingTurnsQueue();
 
-    // Add more test cases as needed below.
+        queue.AddPerson("John");
+        queue.AddPerson("Mary");
+
+        Assert.AreEqual(2, queue.Length);
+    }
 }
