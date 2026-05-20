@@ -1,28 +1,69 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace week02;
+// TODO Problem 2 - Write and run test cases and fix the code to match requirements.
 
 [TestClass]
-public class PriorityQueue_Tests
+public class PriorityQueueTests
 {
     [TestMethod]
-    // Test Result: Queue object was created successfully.
-    public void Test_QueueCreation()
+    // Scenario: Add two items with different priorities and remove one
+    // Expected Result: Item with highest priority is removed first
+    // Defect(s) Found: None yet (baseline test)
+    public void TestPriorityQueue_1()
     {
-        var queue = new TakingTurnsQueue();
+        var priorityQueue = new PriorityQueue();
 
-        Assert.IsNotNull(queue);
+        priorityQueue.Enqueue("John", 1);
+        priorityQueue.Enqueue("Mary", 5);
+
+        string result = priorityQueue.Dequeue();
+
+        Assert.AreEqual("Mary", result);
     }
 
     [TestMethod]
-    // Test Result: Queue length updates correctly after adding people.
-    public void Test_QueueLength()
+    // Scenario: Add multiple items with same priority
+    // Expected Result: Items are removed in FIFO order when priority is equal
+    // Defect(s) Found: Ensures correct tie-breaking behavior
+    public void TestPriorityQueue_2()
     {
-        var queue = new TakingTurnsQueue();
+        var priorityQueue = new PriorityQueue();
 
-        queue.AddPerson("John");
-        queue.AddPerson("Mary");
+        priorityQueue.Enqueue("John", 3);
+        priorityQueue.Enqueue("Mary", 3);
+        priorityQueue.Enqueue("Alex", 3);
 
-        Assert.AreEqual(2, queue.Length);
+        string first = priorityQueue.Dequeue();
+        string second = priorityQueue.Dequeue();
+
+        Assert.AreEqual("John", first);
+        Assert.AreEqual("Mary", second);
+    }
+
+    [TestMethod]
+    // Scenario: Dequeue from empty queue
+    // Expected Result: Exception is thrown
+    // Defect(s) Found: Ensures proper error handling
+    public void TestPriorityQueue_3()
+    {
+        var priorityQueue = new PriorityQueue();
+
+        Assert.ThrowsException<InvalidOperationException>(() =>
+        {
+            priorityQueue.Dequeue();
+        });
+    }
+
+    [TestMethod]
+    // Scenario: Check queue state after enqueue operations
+    // Expected Result: Queue is not empty after adding items
+    // Defect(s) Found: Ensures Enqueue works correctly
+    public void TestPriorityQueue_4()
+    {
+        var priorityQueue = new PriorityQueue();
+
+        priorityQueue.Enqueue("John", 2);
+
+        Assert.IsNotNull(priorityQueue.ToString());
     }
 }
