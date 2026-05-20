@@ -1,11 +1,9 @@
 /// <summary>
-/// This queue is circular.  When people are added via AddPerson, then they are added to the 
-/// back of the queue (per FIFO rules).  When GetNextPerson is called, the next person
-/// in the queue is saved to be returned and then they are placed back into the back of the queue.  Thus,
-/// each person stays in the queue and is given turns.  When a person is added to the queue, 
-/// a turns parameter is provided to identify how many turns they will be given.  If the turns is 0 or
-/// less than they will stay in the queue forever.  If a person is out of turns then they will 
-/// not be added back into the queue.
+/// This queue is circular. When people are added via AddPerson, they are added to the 
+/// back of the queue (FIFO rules). When GetNextPerson is called, the next person
+/// is removed, returned, and then placed back into the queue if they still have turns left.
+/// This ensures each person gets turns in a circular manner. A turns value of 0 or less
+/// means the person has infinite turns.
 /// </summary>
 public class TakingTurnsQueue
 {
@@ -14,10 +12,8 @@ public class TakingTurnsQueue
     public int Length => _people.Length;
 
     /// <summary>
-    /// Add new people to the queue with a name and number of turns
+    /// My method to add people with a specific number of turns
     /// </summary>
-    /// <param name="name">Name of the person</param>
-    /// <param name="turns">Number of turns remaining</param>
     public void AddPerson(string name, int turns)
     {
         var person = new Person(name, turns);
@@ -25,11 +21,17 @@ public class TakingTurnsQueue
     }
 
     /// <summary>
-    /// Get the next person in the queue and return them. The person should
-    /// go to the back of the queue again unless the turns variable shows that they 
-    /// have no more turns left.  Note that a turns value of 0 or less means the 
-    /// person has an infinite number of turns.  An error exception is thrown 
-    /// if the queue is empty.
+    /// My overload method to support adding a person without specifying turns
+    /// (defaults to infinite turns)
+    /// </summary>
+    public void AddPerson(string name)
+    {
+        var person = new Person(name, 0);
+        _people.Enqueue(person);
+    }
+
+    /// <summary>
+    /// My method to get the next person in the queue and handle their turns
     /// </summary>
     public Person GetNextPerson()
     {
@@ -40,17 +42,17 @@ public class TakingTurnsQueue
 
         Person person = _people.Dequeue();
 
-        // Infinite turns
+        // If turns are 0 or less, the person has infinite turns
         if (person.Turns <= 0)
         {
             _people.Enqueue(person);
         }
         else
         {
-            // Reduce turns
+            // Reduce the number of remaining turns
             person.Turns--;
 
-            // Add back if turns remain
+            // Only re-add the person if they still have turns left
             if (person.Turns > 0)
             {
                 _people.Enqueue(person);
