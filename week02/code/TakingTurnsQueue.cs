@@ -12,26 +12,27 @@ public class TakingTurnsQueue
     public int Length => _people.Length;
 
     /// <summary>
-    /// My method to add a person with a specific number of turns
+    /// Add a person with a specified number of turns.
     /// </summary>
     public void AddPerson(string name, int turns)
     {
-        var person = new Person(name, turns);
+        Person person = new Person(name, turns);
         _people.Enqueue(person);
     }
 
     /// <summary>
-    /// My overload method to allow adding a person without specifying turns.
-    /// This is used in my tests and defaults the person to infinite turns.
+    /// Add a person with infinite turns.
     /// </summary>
     public void AddPerson(string name)
     {
-        var person = new Person(name, 0);
+        Person person = new Person(name, 0);
         _people.Enqueue(person);
     }
 
     /// <summary>
-    /// My method to get the next person in the queue and handle their turns logic.
+    /// Remove and return the next person in the queue.
+    /// Re-add the person if they still have turns remaining
+    /// or if they have infinite turns.
     /// </summary>
     public Person GetNextPerson()
     {
@@ -42,17 +43,17 @@ public class TakingTurnsQueue
 
         Person person = _people.Dequeue();
 
-        // If turns are 0 or less, the person has infinite turns and is added back
+        // Infinite turns
         if (person.Turns <= 0)
         {
             _people.Enqueue(person);
         }
         else
         {
-            // Reduce the number of remaining turns
+            // Reduce remaining turns
             person.Turns--;
 
-            // Only add the person back if they still have turns left
+            // Re-add only if turns remain
             if (person.Turns > 0)
             {
                 _people.Enqueue(person);
@@ -63,7 +64,7 @@ public class TakingTurnsQueue
     }
 
     /// <summary>
-    /// My method to display the queue as a string
+    /// Return queue contents as a string.
     /// </summary>
     public override string ToString()
     {
