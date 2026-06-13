@@ -1,4 +1,3 @@
-```csharp
 using System.Collections;
 
 public static class Recursion
@@ -193,4 +192,3 @@ public static class Recursion
             new List<(int, int)>(currPath));
     }
 }
-```
